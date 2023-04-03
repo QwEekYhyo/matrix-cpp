@@ -14,12 +14,18 @@ class matrix {
         inline static matrix<T, rows, rows> indentity();
 
         inline matrix();
+        inline matrix(const matrix<T, rows, columns>&);
         inline matrix(std::array<std::array<T, columns>, rows>);
 
         inline T& operator[](index i);
 
         inline T& at(index i);
         inline const T& at(index i) const;
+
+        inline matrix<T, rows, columns> operator-() const;
+        inline matrix<T, rows, columns> operator+(const matrix<T, rows, columns>& other) const;
+        inline matrix<T, rows, columns> operator-(const matrix<T, rows, columns>& other) const;
+        inline matrix<T, rows, columns> operator*(const T& scalar) const;
 
         std::array<std::array<T, columns>, rows> m_buffer{0}; //this will be private
     private:
@@ -28,6 +34,10 @@ class matrix {
 
 template <typename T, std::size_t rows, std::size_t columns>
 matrix<T, rows, columns>::matrix() = default;
+
+template <typename T, std::size_t rows, std::size_t columns>
+matrix<T, rows, columns>::matrix(const matrix<T, rows, columns>& other)
+    : m_buffer{other.m_buffer} {}
 
 template <typename T, std::size_t rows, std::size_t columns>
 matrix<T, rows, columns>::matrix(std::array<std::array<T, columns>, rows> arr)
@@ -54,6 +64,18 @@ template <typename T, std::size_t rows, std::size_t columns>
 const T& matrix<T, rows, columns>::at(matrix::index i) const {
     ensure_range(i);
     return m_buffer.at(i.y).at(i.x);
+}
+
+template <typename T, std::size_t rows, std::size_t columns>
+matrix<T, rows, columns> matrix<T, rows, columns>::operator+(const matrix<T, rows, columns>& other) const {
+    matrix<T, rows, columns> copied = *this;
+
+    for (std::size_t i = 0; i < columns; i++) {
+        for (std::size_t j = 0; j < rows; j++) {
+            copied.at({i, j}) += other.at({i, j});
+        }
+    }
+    return copied;
 }
 
 #endif 
