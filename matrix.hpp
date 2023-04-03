@@ -15,6 +15,7 @@ class matrix {
 
         inline matrix();
         inline matrix(const matrix<T, rows, columns>&);
+        inline matrix(const matrix<T, rows, columns>&&);
         inline matrix(std::array<std::array<T, columns>, rows>);
 
         inline T& operator[](index i);
@@ -38,6 +39,10 @@ matrix<T, rows, columns>::matrix() = default;
 template <typename T, std::size_t rows, std::size_t columns>
 matrix<T, rows, columns>::matrix(const matrix<T, rows, columns>& other)
     : m_buffer(other.m_buffer) {}
+
+template <typename T, std::size_t rows, std::size_t columns>
+matrix<T, rows, columns>::matrix(const matrix<T, rows, columns>&& other)
+    : m_buffer(std::move(other.m_buffer)) {}
 
 template <typename T, std::size_t rows, std::size_t columns>
 matrix<T, rows, columns>::matrix(std::array<std::array<T, columns>, rows> arr)
