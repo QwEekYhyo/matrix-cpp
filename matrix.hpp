@@ -18,6 +18,9 @@ class matrix {
         inline matrix(const matrix<T, rows, columns>&&);
         inline matrix(std::array<std::array<T, columns>, rows>);
 
+        // IDK if I should use const matrix& as parameter
+        inline matrix<T, rows, columns>& operator=(matrix<T, rows, columns>);
+
         inline T& operator[](index i);
 
         inline T& at(index i);
@@ -47,6 +50,13 @@ matrix<T, rows, columns>::matrix(const matrix<T, rows, columns>&& other)
 template <typename T, std::size_t rows, std::size_t columns>
 matrix<T, rows, columns>::matrix(std::array<std::array<T, columns>, rows> arr)
     : m_buffer(std::move(arr)) {}
+
+// IDK if I should use std::copy instead of std::swap
+template <typename T, std::size_t rows, std::size_t columns>
+matrix<T, rows, columns>& matrix<T, rows, columns>::operator=(matrix<T, rows, columns> other) {
+    std::swap(m_buffer, other.m_buffer);
+    return *this;
+}
 
 template <typename T, std::size_t rows, std::size_t columns>
 T& matrix<T, rows, columns>::operator[](matrix::index i) {
@@ -78,6 +88,18 @@ matrix<T, rows, columns> matrix<T, rows, columns>::operator+(const matrix<T, row
     for (std::size_t i = 0; i < columns; i++) {
         for (std::size_t j = 0; j < rows; j++) {
             copied.at({i, j}) += other.at({i, j});
+        }
+    }
+    return copied;
+}
+
+template <typename T, std::size_t rows, std::size_t columns>
+matrix<T, rows, columns> matrix<T, rows, columns>::operator*(const T& scalar) const {
+    matrix<T, rows, columns> copied = *this;
+
+    for (std::size_t i = 0; i < columns; i++) {
+        for (std::size_t j = 0; j < rows; j++) {
+            copied.at({i, j}) *= scalar;
         }
     }
     return copied;
