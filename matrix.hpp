@@ -37,11 +37,11 @@ matrix<T, rows, columns>::matrix() = default;
 
 template <typename T, std::size_t rows, std::size_t columns>
 matrix<T, rows, columns>::matrix(const matrix<T, rows, columns>& other)
-    : m_buffer{other.m_buffer} {}
+    : m_buffer(other.m_buffer) {}
 
 template <typename T, std::size_t rows, std::size_t columns>
 matrix<T, rows, columns>::matrix(std::array<std::array<T, columns>, rows> arr)
-    : m_buffer{std::move(arr)} {}
+    : m_buffer(std::move(arr)) {}
 
 template <typename T, std::size_t rows, std::size_t columns>
 T& matrix<T, rows, columns>::operator[](matrix::index i) {
