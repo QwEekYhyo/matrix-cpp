@@ -8,6 +8,7 @@ int main() {
     matrix<int, 3> m = orig;
     matrix<int, 3> addition = orig + m;
     addition = addition * -2;
+    addition = addition - orig;
     for (auto arr : addition.m_buffer) {
         for (int n : arr) {
             std::cout << n << " ";

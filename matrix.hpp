@@ -105,4 +105,14 @@ matrix<T, rows, columns> matrix<T, rows, columns>::operator*(const T& scalar) co
     return copied;
 }
 
+template <typename T, std::size_t rows, std::size_t columns>
+matrix<T, rows, columns> matrix<T, rows, columns>::operator-() const {
+    return *this * -1;
+}
+
+template <typename T, std::size_t rows, std::size_t columns>
+matrix<T, rows, columns> matrix<T, rows, columns>::operator-(const matrix<T, rows, columns>& other) const {
+    return *this + -other;
+}
+
 #endif 
