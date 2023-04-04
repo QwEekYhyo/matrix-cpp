@@ -24,6 +24,8 @@ class matrix {
         inline T& at(index i);
         inline const T& at(index i) const;
 
+        inline const std::array<std::array<T, columns>, rows>& get_buffer() const;
+
         inline matrix<T, rows, columns> operator-() const;
         inline matrix<T, rows, columns> operator+(const matrix<T, rows, columns>& other) const;
         inline matrix<T, rows, columns> operator-(const matrix<T, rows, columns>& other) const;
@@ -33,8 +35,9 @@ class matrix {
         bool operator==(const matrix<T, rows, columns>&) const;
         bool operator!=(const matrix<T, rows, columns>&) const;
 
-        std::array<std::array<T, columns>, rows> m_buffer{0}; //this will be private
     private:
+        std::array<std::array<T, columns>, rows> m_buffer{0};
+                                                              
         void ensure_range(index i) const;
 };
 
@@ -86,6 +89,11 @@ template <typename T, std::size_t rows, std::size_t columns>
 const T& matrix<T, rows, columns>::at(matrix::index i) const {
     ensure_range(i);
     return m_buffer.at(i.y).at(i.x);
+}
+
+template <typename T, std::size_t rows, std::size_t columns>
+const std::array<std::array<T, columns>, rows>& matrix<T, rows, columns>::get_buffer() const {
+    return m_buffer;
 }
 
 template <typename T, std::size_t rows, std::size_t columns>
