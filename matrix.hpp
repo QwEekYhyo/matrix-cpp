@@ -11,15 +11,13 @@ class matrix {
             std::size_t x, y;
         };
 
-        inline static matrix<T, rows, rows> indentity();
-
         inline matrix();
         inline matrix(const matrix<T, rows, columns>&);
-        inline matrix(const matrix<T, rows, columns>&&);
+        inline matrix(matrix<T, rows, columns>&&);
         inline matrix(std::array<std::array<T, columns>, rows>);
 
-        // IDK if I should use const matrix& as parameter
-        inline matrix<T, rows, columns>& operator=(matrix<T, rows, columns>);
+        inline matrix<T, rows, columns>& operator=(const matrix<T, rows, columns>&);
+        inline matrix<T, rows, columns>& operator=(matrix<T, rows, columns>&&);
 
         inline T& operator[](index i);
 
@@ -30,6 +28,8 @@ class matrix {
         inline matrix<T, rows, columns> operator+(const matrix<T, rows, columns>& other) const;
         inline matrix<T, rows, columns> operator-(const matrix<T, rows, columns>& other) const;
         inline matrix<T, rows, columns> operator*(const T& scalar) const;
+        bool operator==(const matrix<T, rows, columns>&) const;
+        bool operator!=(const matrix<T, rows, columns>&) const;
 
         std::array<std::array<T, columns>, rows> m_buffer{0}; //this will be private
     private:
@@ -44,17 +44,22 @@ matrix<T, rows, columns>::matrix(const matrix<T, rows, columns>& other)
     : m_buffer(other.m_buffer) {}
 
 template <typename T, std::size_t rows, std::size_t columns>
-matrix<T, rows, columns>::matrix(const matrix<T, rows, columns>&& other)
+matrix<T, rows, columns>::matrix(matrix<T, rows, columns>&& other)
     : m_buffer(std::move(other.m_buffer)) {}
 
 template <typename T, std::size_t rows, std::size_t columns>
 matrix<T, rows, columns>::matrix(std::array<std::array<T, columns>, rows> arr)
     : m_buffer(std::move(arr)) {}
 
-// IDK if I should use std::copy instead of std::swap
 template <typename T, std::size_t rows, std::size_t columns>
-matrix<T, rows, columns>& matrix<T, rows, columns>::operator=(matrix<T, rows, columns> other) {
-    std::swap(m_buffer, other.m_buffer);
+matrix<T, rows, columns>& matrix<T, rows, columns>::operator=(const matrix<T, rows, columns>& other) {
+    m_buffer = other.m_buffer;
+    return *this;
+}
+
+template <typename T, std::size_t rows, std::size_t columns>
+matrix<T, rows, columns>& matrix<T, rows, columns>::operator=(matrix<T, rows, columns>&& other) {
+    m_buffer = other.m_buffer;
     return *this;
 }
 
@@ -113,6 +118,23 @@ matrix<T, rows, columns> matrix<T, rows, columns>::operator-() const {
 template <typename T, std::size_t rows, std::size_t columns>
 matrix<T, rows, columns> matrix<T, rows, columns>::operator-(const matrix<T, rows, columns>& other) const {
     return *this + -other;
+}
+
+template <typename T, std::size_t rows, std::size_t columns>
+bool matrix<T, rows, columns>::operator==(const matrix<T, rows, columns>& other) const {
+    for (std::size_t i = 0; i < columns; i++) {
+        for (std::size_t j = 0; j < rows; j++) {
+            if (at({i, j}) != other.at({i, j})) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+template <typename T, std::size_t rows, std::size_t columns>
+bool matrix<T, rows, columns>::operator!=(const matrix<T, rows, columns>& other) const {
+    return ! (*this == other);
 }
 
 #endif 
