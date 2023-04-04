@@ -24,7 +24,7 @@ class matrix {
         inline T& at(index i);
         inline const T& at(index i) const;
 
-        inline const std::array<std::array<T, columns>, rows>& get_buffer() const;
+        inline const std::array<std::array<T, columns>, rows>& buffer() const;
 
         inline matrix<T, rows, columns> operator-() const;
         inline matrix<T, rows, columns> operator+(const matrix<T, rows, columns>& other) const;
@@ -92,7 +92,7 @@ const T& matrix<T, rows, columns>::at(matrix::index i) const {
 }
 
 template <typename T, std::size_t rows, std::size_t columns>
-const std::array<std::array<T, columns>, rows>& matrix<T, rows, columns>::get_buffer() const {
+const std::array<std::array<T, columns>, rows>& matrix<T, rows, columns>::buffer() const {
     return m_buffer;
 }
 

@@ -9,7 +9,7 @@ int main() {
     matrix<int, 3> addition = orig + m;
     addition = addition * -2;
     addition = addition - orig;
-    for (auto arr : addition.get_buffer()) {
+    for (auto arr : addition.buffer()) {
         for (int n : arr) {
             std::cout << n << " ";
         }
@@ -18,7 +18,7 @@ int main() {
     std::cout << (addition != orig) << std::endl;
     matrix<int, 1, 3> row = {{69, 4, 3}};
     auto multiplication = row * orig;
-    for (auto arr : multiplication.get_buffer()) {
+    for (auto arr : multiplication.buffer()) {
         for (int n : arr) {
             std::cout << n << " ";
         }
