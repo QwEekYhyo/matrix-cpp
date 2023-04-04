@@ -16,6 +16,14 @@ int main() {
         std::cout << '\n';
     }
     std::cout << (addition != orig) << std::endl;
+    matrix<int, 1, 3> row = {{69, 4, 3}};
+    auto multiplication = row * orig;
+    for (auto arr : multiplication.m_buffer) {
+        for (int n : arr) {
+            std::cout << n << " ";
+        }
+        std::cout << '\n';
+    }
 
     return 0;
 }

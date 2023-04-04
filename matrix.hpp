@@ -28,6 +28,8 @@ class matrix {
         inline matrix<T, rows, columns> operator+(const matrix<T, rows, columns>& other) const;
         inline matrix<T, rows, columns> operator-(const matrix<T, rows, columns>& other) const;
         inline matrix<T, rows, columns> operator*(const T& scalar) const;
+        template <std::size_t p>
+        inline matrix<T, rows, p> operator*(const matrix<T, columns, p>& other) const;
         bool operator==(const matrix<T, rows, columns>&) const;
         bool operator!=(const matrix<T, rows, columns>&) const;
 
@@ -108,6 +110,21 @@ matrix<T, rows, columns> matrix<T, rows, columns>::operator*(const T& scalar) co
         }
     }
     return copied;
+}
+
+template <typename T, std::size_t rows, std::size_t columns>
+template <std::size_t p>
+matrix<T, rows, p> matrix<T, rows, columns>::operator*(const matrix<T, columns, p>& other) const {
+    matrix<T, rows, p> result;
+
+    for (std::size_t i = 0; i < p; i++) {
+        for (std::size_t j = 0; j < rows; j++) {
+            for (std::size_t k = 0; k < columns; k++) {
+                result.at({i, j}) += other.at({i, k}) * at({k, j});
+            }
+        }
+    }
+    return result;
 }
 
 template <typename T, std::size_t rows, std::size_t columns>
